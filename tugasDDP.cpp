@@ -13,6 +13,23 @@ int main()
     keypad(stdscr, TRUE);
     curs_set(0);
 
+    string username;
+
+    clear();
+    printw("Masukkan username: ");
+    username.clear();
+    char v;
+        
+    while ((v = getch()) != '\n') {
+    	username += v;
+    	printw("%c", v);
+    }
+
+    clear();
+    printw("Selamat datang, %s!\n", username.c_str());
+    refresh();
+    getch();
+    
     const char *pilihan[] = {
         "Start",
         "Settings",
