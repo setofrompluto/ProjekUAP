@@ -1,13 +1,14 @@
-#include <ncurses/ncurses.h>
+#include <ncurses/curses.h>
 #include <cstdlib>
 #include <ctime>
 #include <windows.h>
+#include <string>
+using namespace std; 
 
 int aste_x, aste_y;
 
 void asteroid()
 {
-
     mvprintw(aste_y, aste_x, "   ");
 
     aste_x--;
@@ -22,7 +23,7 @@ void asteroid()
     Sleep(100);
 }
 
-int main()
+void playGame()
 {
     srand(time(0));
 
@@ -52,49 +53,19 @@ int main()
         {
         case KEY_UP:
             if (y > 0)
-            {
-                y = y - 1;
-            }
-            else
-            {
-                y = y - 0;
-            }
+                y--;
             break;
-
         case KEY_DOWN:
             if (y < LINES - 3)
-            {
-                y = y + 1;
-            }
-            else
-            {
-                y = y + 0;
-            }
+                y++;
             break;
-
         case KEY_RIGHT:
             if (x < COLS - 10)
-            {
-                x = x + 1;
-            }
-            else
-            {
-                x = x + 0;
-            }
+                x++;
             break;
-
         case KEY_LEFT:
             if (x > 0)
-            {
-                x = x - 1;
-            }
-            else
-            {
-                x = x - 0;
-            }
-            break;
-
-        default:
+                x--;
             break;
         }
 
@@ -109,6 +80,34 @@ int main()
         asteroid();
     }
     refresh();
+    endwin();
+}
+
+string get_username()
+{
+    string username;
+    mvprintw(LINES / 2 - 1, COLS / 2 - 10, "Enter your username: ");
+    echo();
+    mvgetstr(LINES / 2, COLS / 2 - 5, &username[0]); 
+    noecho();
+    return username;
+}
+
+int main()
+{
+    initscr();
+    cbreak();
+    noecho();
+    curs_set(1);
+    string username = get_username();
+    clear(); 
+
+    mvprintw(LINES / 2, COLS / 2 - 10, "Welcome, %s!", username.c_str());
+    mvprintw(LINES / 2 + 1, COLS / 2 - 10, "Press any key to start the game...");
+    refresh();
+    getch(); 
+    clear();
+    playGame();
 
     endwin();
     return 0;
