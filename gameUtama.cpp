@@ -5,22 +5,38 @@
 #include <string>
 using namespace std; 
 
-int aste_x, aste_y;
+int aste_x, aste_y, aste_x2, aste_y2;
 
 void asteroid()
 {
-    mvprintw(aste_y, aste_x, "   ");
+    mvprintw(aste_y, aste_x, "            ");
+    mvprintw(aste_y + 1, aste_x, "              ");
+    mvprintw(aste_y + 2, aste_x, "            ");
 
-    aste_x--;
-    if (aste_x < 0)
+    mvprintw(aste_y2, aste_x2, "            ");
+    mvprintw(aste_y2 + 1, aste_x2, "              ");
+    mvprintw(aste_y2 + 2, aste_x2, "            ");
+
+    aste_x--, aste_x2--;
+    if (aste_x <= 0)
     {
         aste_x = COLS - 3;
+        aste_x2 = COLS - 3;
         aste_y = rand() % LINES;
+        aste_y2 = rand() % LINES;
     }
 
-    mvprintw(aste_y, aste_x, "000");
-    refresh();
-    Sleep(100);
+    if (aste_y < LINES - 3 && aste_y2 < LINES - 3)
+    {
+        mvprintw(aste_y, aste_x,     " (0000)))))");
+        mvprintw(aste_y + 1, aste_x, "(000000))))))");
+        mvprintw(aste_y + 2, aste_x, " (0000)))))");
+
+        mvprintw(aste_y2, aste_x2,     " (0000)))))");
+        mvprintw(aste_y2 + 1, aste_x2, "(000000))))))");
+        mvprintw(aste_y2 + 2, aste_x2, " (0000)))))");
+        Sleep(10);
+    }
 }
 
 void playGame()
@@ -41,6 +57,8 @@ void playGame()
 
     int ch = getch();
 
+    int kontrol_asteroid = 0;
+
     aste_x = COLS - 3;
     aste_y = rand() % LINES;
 
@@ -53,19 +71,25 @@ void playGame()
         {
         case KEY_UP:
             if (y > 0)
-                y--;
+                y = y - 1;
             break;
+
         case KEY_DOWN:
             if (y < LINES - 3)
-                y++;
+                y = y + 1;
             break;
+
         case KEY_RIGHT:
             if (x < COLS - 10)
-                x++;
+                x = x + 1;
             break;
+
         case KEY_LEFT:
             if (x > 0)
-                x--;
+                x = x - 1;
+            break;
+
+        default:
             break;
         }
 
@@ -77,10 +101,14 @@ void playGame()
         mvprintw(y + 1, x, plane2);
         mvprintw(y + 2, x, plane3);
 
-        asteroid();
+        kontrol_asteroid++;
+
+        if (kontrol_asteroid >= 10)
+        {
+            asteroid();
+            kontrol_asteroid = 0;
+        }
     }
-    refresh();
-    endwin();
 }
 
 string get_username()
