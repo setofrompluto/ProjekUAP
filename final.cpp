@@ -380,6 +380,8 @@ void menuPilihan()
 }
 int main()
 {
+    loading();
+    clear();
     menuScreen();
     menuPilihan();
     endwin();
